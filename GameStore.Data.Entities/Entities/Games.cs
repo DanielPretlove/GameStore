@@ -6,14 +6,10 @@ using System.Threading.Tasks;
 
 namespace GameStore.Data.Entities.Entities
 {
-	public class Store : BaseEntity
+	public class Games : BaseEntity
 	{
-		public virtual string Description { get; set; } = string.Empty;
 		public virtual string Name { get; set; } = string.Empty;
-		public virtual Customers? customer { get; set; }
-		public virtual Games? games { get; set; }
-
-
-
+		public virtual string Description { get; set; } = string.Empty;
+		public virtual string ReleaseDate { get; set; } = string.Empty;
 	}
 }
