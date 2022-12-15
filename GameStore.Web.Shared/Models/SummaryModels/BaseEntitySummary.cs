@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GameStore.Data.Entities.Entities
+namespace GameStore.Web.Shared.Models.SummaryModels
 {
-	public class BaseEntity
+	public class BaseEntitySummary
 	{
 		public Guid Id { get; set; }
 	}

@@ -22,11 +22,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
-  </ItemGroup>
-
-  <ItemGroup>
+    <ProjectReference Include="..\GameStore.Application\GameStore.Application.csproj" />
+    <ProjectReference Include="..\GameStore.Common\GameStore.Common.csproj" />
     <ProjectReference Include="..\GameStore.Data.Access\GameStore.Data.Access.csproj" />
+    <ProjectReference Include="..\GameStore.Web.Shared\GameStore.Web.Shared.csproj" />
   </ItemGroup>
 
 </Project>

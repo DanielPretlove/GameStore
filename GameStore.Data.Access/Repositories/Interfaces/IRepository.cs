@@ -7,12 +7,6 @@ using GameStore.Data.Entities.Entities;
 
 namespace GameStore.Data.Access.Repositories.Interfaces
 {
-    /// <summary>
-    /// basic crud operations for customer, games and store
-    /// you can add/edit/delete/getall and getId via the customer 
-    /// you can add/edit/delete/getall and getId via the games 
-    /// you can add/edit/delete/getall and getId via the store 
-    /// </summary>
     public interface IRepository<T>
     {
         Task<T> GetDataByIdAsync(Guid id);

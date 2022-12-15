@@ -22,7 +22,7 @@ namespace GameStore.Web.API.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("GameStore.Data.Entities.Entities.Customers", b =>
+            modelBuilder.Entity("GameStore.Data.Entities.Entities.Customer", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -42,10 +42,10 @@ namespace GameStore.Web.API.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Customers");
+                    b.ToTable("Customer");
                 });
 
-            modelBuilder.Entity("GameStore.Data.Entities.Entities.Games", b =>
+            modelBuilder.Entity("GameStore.Data.Entities.Entities.Game", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -65,7 +65,7 @@ namespace GameStore.Web.API.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Games");
+                    b.ToTable("Game");
                 });
 
             modelBuilder.Entity("GameStore.Data.Entities.Entities.Store", b =>
@@ -99,11 +99,11 @@ namespace GameStore.Web.API.Migrations
 
             modelBuilder.Entity("GameStore.Data.Entities.Entities.Store", b =>
                 {
-                    b.HasOne("GameStore.Data.Entities.Entities.Customers", "customer")
+                    b.HasOne("GameStore.Data.Entities.Entities.Customer", "customer")
                         .WithMany()
                         .HasForeignKey("customerId");
 
-                    b.HasOne("GameStore.Data.Entities.Entities.Games", "games")
+                    b.HasOne("GameStore.Data.Entities.Entities.Game", "games")
                         .WithMany()
                         .HasForeignKey("gamesId");
 

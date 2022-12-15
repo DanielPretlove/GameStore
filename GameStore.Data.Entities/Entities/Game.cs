@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GameStore.Data.Entities.Entities
 {
-	public class Games : BaseEntity
+	public class Game : BaseEntity
 	{
 		public virtual string Name { get; set; } = string.Empty;
 		public virtual string Description { get; set; } = string.Empty;

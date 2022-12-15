@@ -3,17 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using GameStore.Data.Entities.Entities;
 
-namespace GameStore.Data.Entities.Entities
+namespace GameStore.Web.Shared.Models.SummaryModels
 {
-	public class Store : BaseEntity
+	public partial class StoreSummaryModel : BaseEntitySummary
 	{
 		public virtual string Description { get; set; } = string.Empty;
 		public virtual string Name { get; set; } = string.Empty;
-		public virtual Customer? customer { get; set; }
-		public virtual Game? games { get; set; }
-
-
-
+		public virtual Customer? Customer { get; set; }
+		public virtual Game? Game { get; set; }
 	}
 }

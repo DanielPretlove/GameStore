@@ -12,7 +12,7 @@ namespace GameStore.Web.API.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Customers",
+                name: "Customer",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -22,11 +22,11 @@ namespace GameStore.Web.API.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Customers", x => x.Id);
+                    table.PrimaryKey("PK_Customer", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Games",
+                name: "Game",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -36,7 +36,7 @@ namespace GameStore.Web.API.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Games", x => x.Id);
+                    table.PrimaryKey("PK_Game", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -53,14 +53,14 @@ namespace GameStore.Web.API.Migrations
                 {
                     table.PrimaryKey("PK_Store", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Store_Customers_customerId",
+                        name: "FK_Store_Customer_customerId",
                         column: x => x.customerId,
-                        principalTable: "Customers",
+                        principalTable: "Customer",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_Store_Games_gamesId",
+                        name: "FK_Store_Game_gamesId",
                         column: x => x.gamesId,
-                        principalTable: "Games",
+                        principalTable: "Game",
                         principalColumn: "Id");
                 });
 
@@ -82,10 +82,10 @@ namespace GameStore.Web.API.Migrations
                 name: "Store");
 
             migrationBuilder.DropTable(
-                name: "Customers");
+                name: "Customer");
 
             migrationBuilder.DropTable(
-                name: "Games");
+                name: "Game");
         }
     }
 }

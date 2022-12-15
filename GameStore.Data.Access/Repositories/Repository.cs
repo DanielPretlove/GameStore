@@ -29,13 +29,9 @@ namespace GameStore.Data.Access.Repositories
 		public async Task<T> DeleteDataAsync(Guid id)
 		{
 			var result = await _context.Set<T>().FindAsync(id);
-			if(result != null)
-			{
-				_context.Set<T>().Remove(result);
-				await _context.SaveChangesAsync();
-				return result;
-			}
-			return null;
+			_context.Set<T>().Remove(result);
+			await _context.SaveChangesAsync();
+			return result;
 		}
 
 		public async Task<IList<T>> GetAllDataAsync()
