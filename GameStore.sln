@@ -9,13 +9,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameStore.Data.Access", "Ga
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameStore.Data.Entities", "GameStore.Data.Entities\GameStore.Data.Entities.csproj", "{BD2C3BAF-4D10-4BCF-BF8C-525FC548EFF5}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameStore.Web.API", "GameStore.Web.API\GameStore.Web.API.csproj", "{A85A119D-8F9B-4026-90B0-4FE170042D91}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameStore.Web.UI", "GameStore.Web.UI\GameStore.Web.UI.csproj", "{EE314FC1-F640-4C26-A17C-5CC7ACEBBD73}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameStore.Common", "GameStore.Common\GameStore.Common.csproj", "{D181A633-1C12-4123-A405-68081A4D4201}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameStore.Web.Shared", "GameStore.Web.Shared\GameStore.Web.Shared.csproj", "{1CEA1939-0F19-4817-A546-824CF4A00604}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameStore.Web.Shared", "GameStore.Web.Shared\GameStore.Web.Shared.csproj", "{1CEA1939-0F19-4817-A546-824CF4A00604}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameStore.Web.Client", "GameStore.Web.Client\GameStore.Web.Client.csproj", "{261D53BD-17BF-49C0-98DC-D74196FBBE0E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameStore.Web.Server", "GameStore.Web.Server\GameStore.Web.Server.csproj", "{435CAD71-2BE1-41A5-9C41-9BFFA8A21E78}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,14 +35,6 @@ Global
 		{BD2C3BAF-4D10-4BCF-BF8C-525FC548EFF5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BD2C3BAF-4D10-4BCF-BF8C-525FC548EFF5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BD2C3BAF-4D10-4BCF-BF8C-525FC548EFF5}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A85A119D-8F9B-4026-90B0-4FE170042D91}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A85A119D-8F9B-4026-90B0-4FE170042D91}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A85A119D-8F9B-4026-90B0-4FE170042D91}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A85A119D-8F9B-4026-90B0-4FE170042D91}.Release|Any CPU.Build.0 = Release|Any CPU
-		{EE314FC1-F640-4C26-A17C-5CC7ACEBBD73}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{EE314FC1-F640-4C26-A17C-5CC7ACEBBD73}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{EE314FC1-F640-4C26-A17C-5CC7ACEBBD73}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{EE314FC1-F640-4C26-A17C-5CC7ACEBBD73}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D181A633-1C12-4123-A405-68081A4D4201}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D181A633-1C12-4123-A405-68081A4D4201}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D181A633-1C12-4123-A405-68081A4D4201}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -51,6 +43,14 @@ Global
 		{1CEA1939-0F19-4817-A546-824CF4A00604}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1CEA1939-0F19-4817-A546-824CF4A00604}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1CEA1939-0F19-4817-A546-824CF4A00604}.Release|Any CPU.Build.0 = Release|Any CPU
+		{261D53BD-17BF-49C0-98DC-D74196FBBE0E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{261D53BD-17BF-49C0-98DC-D74196FBBE0E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{261D53BD-17BF-49C0-98DC-D74196FBBE0E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{261D53BD-17BF-49C0-98DC-D74196FBBE0E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{435CAD71-2BE1-41A5-9C41-9BFFA8A21E78}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{435CAD71-2BE1-41A5-9C41-9BFFA8A21E78}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{435CAD71-2BE1-41A5-9C41-9BFFA8A21E78}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{435CAD71-2BE1-41A5-9C41-9BFFA8A21E78}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

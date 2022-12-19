@@ -8,12 +8,8 @@ namespace GameStore.Data.Entities.Entities
 {
 	public class Store : BaseEntity
 	{
-		public virtual string Description { get; set; } = string.Empty;
-		public virtual string Name { get; set; } = string.Empty;
-		public virtual Customer? customer { get; set; }
-		public virtual Game? games { get; set; }
-
-
-
+		public required virtual string Description { get; set; }
+		public required virtual string Name { get; set; } 
+		public required virtual string Address { get; set; }
 	}
 }

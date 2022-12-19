@@ -12,6 +12,9 @@ namespace GameStore.Application.Services
 	public class GameStoreService<T>
 		where T : BaseEntity
 	{ 
+
+		// create a game count
+		// create a purchase 
 		private readonly IRepository<T> _modelCustomerRetrieveService;
 		public GameStoreService(IRepository<T> modelCustomerRetrieveService)
 		{

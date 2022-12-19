@@ -26,8 +26,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\GameStore.Application\GameStore.Application.csproj" />
-    <ProjectReference Include="..\GameStore.Data.Access\GameStore.Data.Access.csproj" />
     <ProjectReference Include="..\GameStore.Data.Entities\GameStore.Data.Entities.csproj" />
     <ProjectReference Include="..\GameStore.Web.Shared\GameStore.Web.Shared.csproj" />
   </ItemGroup>

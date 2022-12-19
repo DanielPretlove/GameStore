@@ -21,7 +21,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\GameStore.Data.Entities\GameStore.Data.Entities.csproj" />
-    <ProjectReference Include="..\GameStore.Web.Shared\GameStore.Web.Shared.csproj" />
   </ItemGroup>
 
 </Project>
