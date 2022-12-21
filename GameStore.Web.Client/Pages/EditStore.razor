@@ -1,0 +1,89 @@
+﻿@page "/store/update/{id}"
+@using GameStore.Web.Shared.Models.SummaryModels;
+@using System.Text.Json
+@using System.Text
+
+@inject NavigationManager UriHelper
+@inject HttpClient http
+
+@if(storeSummary != null)
+{
+	<MudCard>
+		<MudCardContent>
+			<MudForm @ref="form" @bind-IsValid="@success">
+				<MudText Typo="Typo.h3">Edit Store Data</MudText>
+				<MudTextField @bind-Value="@storeSummary.Description" T="string" Label="Description" Required="true" RequiredError="Description is required!" />
+				<MudTextField @bind-Value="@storeSummary.Name" T="string" Label="Name" Required="true" RequiredError="Name is required!" />
+				<MudTextField @bind-Value="@storeSummary.Address" T="string" Label="Address" Required="true" RequiredError="Address is required!" />
+			</MudForm>
+		</MudCardContent>
+		<MudCardActions>
+			<MudButton Variant="Variant.Filled" StartIcon="@Icons.Filled.ArrowBack" OnClick="@(() => ReturnToViewStoreDetails())">Go Back</MudButton>
+			<MudButton Variant="Variant.Filled" StartIcon="@Icons.Filled.Save" Color="Color.Info" OnClick="@(() => UpdateStoreData())">Save</MudButton>
+		</MudCardActions>
+	</MudCard>
+
+	<br />
+	@if(update == true)
+	{
+		<MudAlert Severity="Severity.Success">Successfully Updated The @storeSummary.Name Store <br>Now Return to the View Page</MudAlert>
+	}
+}
+
+@*
+	First display the data based on the id of the data
+	with all of the inputs showing
+	have a button of save and go back
+	and make sure they work
+	basically the gist of this
+*@
+
+@code {
+	[Parameter]
+	public string? Id { get; set; }
+	public bool success;
+	public bool update = false;
+	public MudForm form;
+	public StoreSummaryModel storeSummary;
+
+	protected override async Task OnInitializedAsync()
+	{
+		storeSummary = await GetCurrentStore();
+	}
+
+	public void ReturnToViewStoreDetails()
+	{
+		UriHelper.NavigateTo("/store/" + Id);
+	}
+
+	public async Task<StoreSummaryModel> GetCurrentStore() =>
+		await http.GetFromJsonAsync<StoreSummaryModel>($"/api/GameStore/{Id}");
+
+	public async Task UpdateStoreData()
+	{
+		HttpContent body = new StringContent(JsonSerializer.Serialize(storeSummary), Encoding.UTF8, "application/json");
+		var response = await http.PutAsync($"/api/GameStore/{Id}", body);
+		if(response.IsSuccessStatusCode)
+		{
+			var content = await response.Content.ReadAsStringAsync();
+			if (!string.IsNullOrEmpty(content))
+			{
+				var objDeserializeObject = JsonSerializer.Deserialize<StoreSummaryModel>(content);
+
+				Console.WriteLine("Data Updated Successfully.");
+			}
+
+			update = true;
+
+			await Task.Run(async () =>
+			{
+				await Task.Delay(3000);
+				ReturnToViewStoreDetails();
+			});
+		}
+		else
+		{
+			update = false;
+		}
+	}
+}

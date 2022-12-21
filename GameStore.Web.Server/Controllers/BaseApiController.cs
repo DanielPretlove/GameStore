@@ -47,9 +47,9 @@ namespace GameStore.Web.API.Controllers
 		}
 
 		[HttpPut("{id}")]
-		public void UpdateCustomer(T data)
+		public async Task UpdateData(T data)
 		{
-			_mapper.Map<T>(_service.UpdataData(data));
+			await _service.UpdataData(data);
 		}
 
 		[HttpDelete("{id}")]

@@ -14,7 +14,7 @@ namespace GameStore.Common.Helpers
 		public AutoMapperProfiles() 
 		{
 			CreateMap<Customer, CustomerSummaryModel>();
-			CreateMap<Store, StoreSummaryModel>();
+			CreateMap<Store, StoreSummaryModel>().ReverseMap();
 			CreateMap<Game, GameSummaryModel>();
 		}
 	}
