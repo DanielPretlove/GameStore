@@ -58,7 +58,7 @@
 	public void DeleteCurrentEntry()
 	{
 		DeleteDialogOptions deleteDialog = new DeleteDialogOptions { Position = DialogPosition.Center, Id = Id };
-		Dialog.Show<DeleteEntry>($"Are you sure you want to delete the {summaryModels.Name} From the database", deleteDialog);
+		Dialog.Show<DeleteEntry<T>>($"Are you sure you want to delete the {summaryModels.Name} From the database", deleteDialog);
 	}
 
 }
