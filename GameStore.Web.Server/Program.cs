@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.ResponseCompression;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
+builder.Services.AddCors();
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 builder.Services.AddEndpointsApiExplorer();
@@ -28,6 +28,11 @@ else
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors(e => e
+        .AllowAnyOrigin()
+        .AllowAnyHeader()
+        .AllowAnyMethod());
 
 app.UseBlazorFrameworkFiles();
 app.UseStaticFiles();

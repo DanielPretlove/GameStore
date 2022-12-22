@@ -1,0 +1,74 @@
+﻿@page "/game/create"
+
+@using GameStore.Web.Shared.Models.SummaryModels;
+@using System.Text.Json;
+@using System.Text;
+
+
+@inject NavigationManager UriHelper
+@inject HttpClient http
+
+<MudCard>
+	<MudCardContent>
+		<MudForm @ref="form">
+			<MudText Typo="Typo.h3">Create New Game Data</MudText>
+			<MudTextField @bind-Value="@NameValue" T="string" Label="Name" Required="true" RequiredError="Name is required!" />
+			<MudTextField @bind-Value="@DescriptionValue" T="string" Label="Description" Required="true" RequiredError="Description is required!" />
+			<MudTextField @bind-Value="@ReleaseDateValue" T="string" Label="Release Date" Required="true" RequiredError="Release Date is required!" />
+		</MudForm>
+	</MudCardContent>
+	<MudCardActions>
+		<MudButton Variant="Variant.Filled" StartIcon="@Icons.Filled.ArrowBack" OnClick="@(() => ReturnToViewGameDetails())">Go Back</MudButton>
+		<MudButton Disabled="@createState" Variant="Variant.Filled" StartIcon="@Icons.Filled.Save" Color="Color.Info" OnClick="@(() => CreateGame())">
+			@if (createState == true)
+			{
+					<MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true" />
+					<MudText Class="ms-2">Processing</MudText>
+			}
+			else
+			{
+					<MudText>Save</MudText>
+			}
+		</MudButton>
+	</MudCardActions>
+</MudCard>
+<br />
+
+@code {
+	public bool createState = false;
+	public MudForm form;
+	public string DescriptionValue = string.Empty;
+	public string NameValue = string.Empty;
+	public string ReleaseDateValue = string.Empty;
+	public GameSummaryModel gameSummary;
+	private string? errorMessage;
+
+	public void ReturnToViewGameDetails()
+	{
+		UriHelper.NavigateTo("/game");
+	}
+
+
+	public async Task CreateGame()
+	{
+		var postBody = new { Name = NameValue, Description = DescriptionValue, ReleaseDate = ReleaseDateValue };
+
+
+		using var response = await http.PostAsJsonAsync("api/Game", postBody);
+
+		if (!response.IsSuccessStatusCode)
+		{
+			errorMessage = response.ReasonPhrase;
+			Console.WriteLine($"There was an error! {errorMessage}");
+			return;
+		}
+
+		gameSummary = await response.Content.ReadFromJsonAsync<GameSummaryModel>();
+		createState = true;
+		await Task.Run(async () =>
+		{
+			await Task.Delay(3000);
+			ReturnToViewGameDetails();
+		});
+	}
+}

@@ -1,0 +1,64 @@
+﻿@page "/customer"
+@using GameStore.Web.Shared.Models.SummaryModels;
+
+@inject HttpClient http
+@inject NavigationManager UriHelper
+
+
+
+@if(customerSummary.Count == 0)
+{
+    <MudText Typo="Typo.h4">There are no entries, please create a valid entry</MudText>
+}
+else
+{
+    <MudTable Items="@customerSummary" Hover="true" Breakpoint="Breakpoint.Sm" LoadingProgressColor="Color.Info">
+        <HeaderContent>
+            <MudTh>Id</MudTh>
+            <MudTh>Name</MudTh>
+            <MudTh>Customer</MudTh>
+            <MudTh>DOB</MudTh>
+            <MudTh>View</MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd DataLabel="Id">@context.Id</MudTd>
+            <MudTd DataLabel="Name">@context.Name</MudTd>
+            <MudTd DataLabel="Address">@context.Address</MudTd>
+            <MudTd DataLabel="DOB">@context.DOB</MudTd>
+            <MudIcon Icon="@Icons.Filled.RemoveRedEye" @onclick="() => ViewCurrentCustomer(context.Id)" Title="View" Style="cursor: pointer;" />
+        </RowTemplate>
+    </MudTable>
+}
+
+
+
+<br />
+
+<MudButton Variant="Variant.Filled" StartIcon="@Icons.Filled.Create" Color="Color.Info" OnClick="@(() => CreateNewCustomerEntry())">Create New Entry</MudButton>
+
+@code {
+    private IList<CustomerSummaryModel> customerSummary = Array.Empty<CustomerSummaryModel>();
+    protected override async Task OnInitializedAsync()
+    {
+        customerSummary = await GetAllCustomers();
+    }
+
+
+
+    public async Task<IList<CustomerSummaryModel>> GetAllCustomers()
+    {
+        return await http.GetFromJsonAsync<IList<CustomerSummaryModel>>("/api/Customer/list");
+    }
+
+    public async Task<string> ViewCurrentCustomer(Guid id)
+    {
+        var response = await http.GetFromJsonAsync<CustomerSummaryModel>($"/api/Customer/{id}");
+        UriHelper.NavigateTo($"/customer/{id}");
+        return response.Name;
+    }
+
+    public void CreateNewCustomerEntry()
+    {
+        UriHelper.NavigateTo("customer/create");
+    }
+}

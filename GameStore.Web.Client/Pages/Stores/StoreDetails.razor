@@ -3,6 +3,7 @@
 
 @inject HttpClient http
 @inject NavigationManager UriHelper
+@inject IDialogService Dialog
 
 
 <MudPaper Class="pa-16 ma-2" Outlined="true">
@@ -19,15 +20,15 @@
 	<MudButton Variant="Variant.Filled" StartIcon="@Icons.Filled.ArrowBack" OnClick="@(() => ReturnToStoreMenu())">Go Back</MudButton>
 
 	<MudButton Variant="Variant.Filled" StartIcon="@Icons.Filled.Edit" Color="Color.Warning" OnClick="@(() => EditStore())">Edit</MudButton>
-	<MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Delete" Color="Color.Error">Delete</MudButton>
-
+	<MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Delete" Color="Color.Error" OnClick="@(() => DeleteCurrentStore())">Delete</MudButton>
 </MudPaper>
+
+
 
 @code {
 	[Parameter]
 	public string? Id { get; set; }
 	public StoreSummaryModel storeSummary;
-	public bool deleteState = false;
 
 	protected override async Task OnInitializedAsync()
 	{
@@ -48,8 +49,11 @@
 	}
 
 
-	private void DeleteCurrentStore()
+	public void DeleteCurrentStore()
 	{
-		deleteState = true;
+		//DialogOptions dialogOptions = new DialogOptions() { Position = DialogPosition.Center };
+		DeleteDialogOptions deleteDialog = new DeleteDialogOptions { Position = DialogPosition.Center, Id = Id };
+		Dialog.Show<DeleteStore>($"Are you sure you want to delete the {storeSummary.Name} Store", deleteDialog);
 	}
+
 }

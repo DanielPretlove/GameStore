@@ -19,15 +19,22 @@
 		</MudCardContent>
 		<MudCardActions>
 			<MudButton Variant="Variant.Filled" StartIcon="@Icons.Filled.ArrowBack" OnClick="@(() => ReturnToViewStoreDetails())">Go Back</MudButton>
-			<MudButton Variant="Variant.Filled" StartIcon="@Icons.Filled.Save" Color="Color.Info" OnClick="@(() => UpdateStoreData())">Save</MudButton>
+			<MudButton Disabled="@updateState" Variant="Variant.Filled" StartIcon="@Icons.Filled.Save" Color="Color.Info" OnClick="@(() => UpdateStoreData())">
+				@if (updateState)
+				{
+					<MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true" />
+					<MudText Class="ms-2">Processing</MudText>
+				}
+				else
+				{
+					<MudText>Save</MudText>
+				}
+
+			</MudButton>
 		</MudCardActions>
 	</MudCard>
 
 	<br />
-	@if(update == true)
-	{
-		<MudAlert Severity="Severity.Success">Successfully Updated The @storeSummary.Name Store <br>Now Return to the View Page</MudAlert>
-	}
 }
 
 @*
@@ -42,7 +49,7 @@
 	[Parameter]
 	public string? Id { get; set; }
 	public bool success;
-	public bool update = false;
+	public bool updateState = false;
 	public MudForm form;
 	public StoreSummaryModel storeSummary;
 
@@ -61,6 +68,7 @@
 
 	public async Task UpdateStoreData()
 	{
+
 		HttpContent body = new StringContent(JsonSerializer.Serialize(storeSummary), Encoding.UTF8, "application/json");
 		var response = await http.PutAsync($"/api/GameStore/{Id}", body);
 		if(response.IsSuccessStatusCode)
@@ -72,18 +80,14 @@
 
 				Console.WriteLine("Data Updated Successfully.");
 			}
-
-			update = true;
+		
+			updateState = true;
 
 			await Task.Run(async () =>
 			{
 				await Task.Delay(3000);
 				ReturnToViewStoreDetails();
 			});
-		}
-		else
-		{
-			update = false;
 		}
 	}
 }

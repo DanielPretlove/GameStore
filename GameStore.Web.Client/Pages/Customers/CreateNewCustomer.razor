@@ -1,0 +1,74 @@
+﻿@page "/customer/create"
+
+@using GameStore.Web.Shared.Models.SummaryModels;
+@using System.Text.Json;
+@using System.Text;
+
+
+@inject NavigationManager UriHelper
+@inject HttpClient http
+
+<MudCard>
+	<MudCardContent>
+		<MudForm @ref="form">
+			<MudText Typo="Typo.h3">Create New Customer Entry</MudText>
+			<MudTextField @bind-Value="@NameValue" T="string" Label="Name" Required="true" RequiredError="Name is required!" />
+			<MudTextField @bind-Value="@AddressValue" T="string" Label="Address" Required="true" RequiredError="Address is required!" />
+			<MudTextField @bind-Value="@DOBValue" T="string" Label="DOB" Required="true" RequiredError="DOB is required!" />
+		</MudForm>
+	</MudCardContent>
+	<MudCardActions>
+		<MudButton Variant="Variant.Filled" StartIcon="@Icons.Filled.ArrowBack" OnClick="@(() => ReturnToViewCustomerDetails())">Go Back</MudButton>
+		<MudButton Disabled="@createState" Variant="Variant.Filled" StartIcon="@Icons.Filled.Save" Color="Color.Info" OnClick="@(() => CreateNewCustomerEntry())">
+			@if (createState == true)
+			{
+					<MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true" />
+					<MudText Class="ms-2">Processing</MudText>
+			}
+			else
+			{
+					<MudText>Save</MudText>
+			}
+		</MudButton>
+	</MudCardActions>
+</MudCard>
+<br />
+
+@code {
+	public bool createState = false;
+	public MudForm form;
+	public string NameValue = string.Empty;
+	public string AddressValue = string.Empty;
+	public string DOBValue = string.Empty;
+	public CustomerSummaryModel customerSummary;
+	private string? errorMessage;
+
+	public void ReturnToViewCustomerDetails()
+	{
+		UriHelper.NavigateTo("/customer");
+	}
+
+
+	public async Task CreateNewCustomerEntry()
+	{
+		var postBody = new { Name = NameValue, Address = AddressValue, DOB = DOBValue };
+
+
+		using var response = await http.PostAsJsonAsync("api/Customer", postBody);
+
+		if (!response.IsSuccessStatusCode)
+		{
+			errorMessage = response.ReasonPhrase;
+			Console.WriteLine($"There was an error! {errorMessage}");
+			return;
+		}
+
+		customerSummary = await response.Content.ReadFromJsonAsync<CustomerSummaryModel>();
+		createState = true;
+		await Task.Run(async () =>
+		{
+			await Task.Delay(3000);
+			ReturnToViewCustomerDetails();
+		});
+	}
+}
