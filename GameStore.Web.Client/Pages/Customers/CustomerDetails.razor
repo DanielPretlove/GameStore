@@ -18,7 +18,6 @@
 
 	<br />
 	<MudButton Variant="Variant.Filled" StartIcon="@Icons.Filled.ArrowBack" OnClick="@(() => ReturnToCustomerMenu())">Go Back</MudButton>
-
 	<MudButton Variant="Variant.Filled" StartIcon="@Icons.Filled.Edit" Color="Color.Warning" OnClick="@(() => EditCustomer())">Edit</MudButton>
 	<MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Delete" Color="Color.Error" OnClick="@(() => DeleteCurrentCustomer())">Delete</MudButton>
 </MudPaper>
@@ -47,7 +46,6 @@
 	{
 		UriHelper.NavigateTo($"/customer/update/{Id}");
 	}
-
 
 	public void DeleteCurrentCustomer()
 	{

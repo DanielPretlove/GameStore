@@ -1,0 +1,67 @@
+﻿@page "/store"
+@using GameStore.Web.Client.Pages.Components
+@using GameStore.Web.Shared.Models.SummaryModels;
+
+
+
+@inject HttpClient http
+@inject NavigationManager UriHelper
+
+<h3>List of Stores</h3>
+
+
+@if (storeSummaryModel.Count == 0)
+{
+    <MudText Typo="Typo.h4">There are no entries, please create a valid entry</MudText>
+}
+else
+{
+    <MudTable Items="@storeSummaryModel" Hover="true" Breakpoint="Breakpoint.Sm" LoadingProgressColor="Color.Info">
+    <HeaderContent>
+        <MudTh>Id</MudTh>
+        <MudTh>Description</MudTh>
+        <MudTh>Name</MudTh>
+		<MudTh>Address</MudTh>
+		<MudTh>View</MudTh>
+    </HeaderContent>
+	<RowTemplate>
+        <MudTd DataLabel="Id">@context.Id</MudTd>
+        <MudTd DataLabel="Name">@context.Description</MudTd>
+        <MudTd DataLabel="Description">@context.Name</MudTd>
+        <MudTd DataLabel="Address">@context.Address</MudTd>
+		<MudIcon Icon="@Icons.Filled.RemoveRedEye" @onclick="() => ViewCurrentStore(context.Id)" Title="View" Style="cursor: pointer;" />
+    </RowTemplate>
+</MudTable>
+}
+
+
+
+<br />
+
+<MudButton Variant="Variant.Filled" StartIcon="@Icons.Filled.Create" Color="Color.Info" OnClick="@(() => CreateNewStore())">Create New Entry</MudButton>
+
+
+@code {
+    private IList<GameStoreSummaryModel> storeSummaryModel = Array.Empty<GameStoreSummaryModel>();
+    protected override async Task OnInitializedAsync()
+    {
+        storeSummaryModel = await GetStoreSummary();
+    }
+
+    public async Task<IList<GameStoreSummaryModel>> GetStoreSummary()
+    {
+        return await http.GetFromJsonAsync<IList<GameStoreSummaryModel>>("/api/GameStore/list");
+    }
+
+    public async Task<string> ViewCurrentStore(Guid id)
+    {
+        var response = await http.GetFromJsonAsync<GameStoreSummaryModel>($"/api/GameStore/{id}");
+        UriHelper.NavigateTo($"/store/{id}");
+        return response.Name;
+    }
+
+    public void CreateNewStore()
+    {
+        UriHelper.NavigateTo("store/create");
+    }
+}

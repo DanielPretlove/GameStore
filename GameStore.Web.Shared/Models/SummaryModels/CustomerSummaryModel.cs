@@ -8,7 +8,6 @@ namespace GameStore.Web.Shared.Models.SummaryModels
 {
 	public class CustomerSummaryModel : BaseEntitySummary
 	{
-		public virtual string Name { get; set; } = string.Empty;
 		public virtual string Address { get; set; } = string.Empty;
 		public virtual string DOB { get; set; } = string.Empty;
 	}

@@ -1,0 +1,57 @@
+﻿@using GameStore.Web.Shared.Models.SummaryModels;
+
+@inject HttpClient http
+@inject NavigationManager UriHelper
+
+@typeparam T where T : BaseEntitySummary
+
+
+
+<MudTable Items="@summaryModels" Hover="true" Breakpoint="Breakpoint.Sm" LoadingProgressColor="Color.Info">
+    <HeaderContent>
+        @foreach(var propertyInfo in typeof(T).GetProperties())
+        {
+            <MudTh>@propertyInfo.Name</MudTh>
+        }
+    </HeaderContent>
+    <RowTemplate>
+        @foreach (var propertyInfo in typeof(T).GetProperties())
+        {
+            <MudTd DataLabel="@propertyInfo.Name">@propertyInfo.GetValue(context)</MudTd>
+        }
+        
+        <MudIcon Icon="@Icons.Filled.RemoveRedEye" @onclick="() => ViewCurrentObject(context)" Title="View" Style="cursor: pointer;" />
+    </RowTemplate>
+</MudTable>
+
+@code {
+
+    private IList<T> summaryModels = Array.Empty<T>();
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        summaryModels = await GetSummaries();
+    }
+
+    protected string ApiEntityName => typeof(T).Name.Replace("SummaryModel", "");
+
+    public async Task<IList<T>> GetSummaries()
+    {
+        return await http.GetFromJsonAsync<IList<T>>($"/api/{ApiEntityName}/list");
+    }
+
+    public async Task<string> ViewCurrentObject(T model)
+    {
+        var id = model.Id;
+        var response = await http.GetFromJsonAsync<T>($"/api/{ApiEntityName}/{id}");
+        UriHelper.NavigateTo($"/store/{id}");
+        return response.Name;
+    }
+
+    public void CreateNewStore(T property)
+    {
+        UriHelper.NavigateTo($"{property.Name}/create");
+    }
+}
+

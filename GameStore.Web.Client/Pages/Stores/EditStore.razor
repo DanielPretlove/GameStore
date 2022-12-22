@@ -51,7 +51,7 @@
 	public bool success;
 	public bool updateState = false;
 	public MudForm form;
-	public StoreSummaryModel storeSummary;
+	public GameStoreSummaryModel storeSummary;
 
 	protected override async Task OnInitializedAsync()
 	{
@@ -63,8 +63,8 @@
 		UriHelper.NavigateTo("/store/" + Id);
 	}
 
-	public async Task<StoreSummaryModel> GetCurrentStore() =>
-		await http.GetFromJsonAsync<StoreSummaryModel>($"/api/GameStore/{Id}");
+	public async Task<GameStoreSummaryModel> GetCurrentStore() =>
+		await http.GetFromJsonAsync<GameStoreSummaryModel>($"/api/GameStore/{Id}");
 
 	public async Task UpdateStoreData()
 	{
@@ -76,7 +76,7 @@
 			var content = await response.Content.ReadAsStringAsync();
 			if (!string.IsNullOrEmpty(content))
 			{
-				var objDeserializeObject = JsonSerializer.Deserialize<StoreSummaryModel>(content);
+				var objDeserializeObject = JsonSerializer.Deserialize<GameStoreSummaryModel>(content);
 
 				Console.WriteLine("Data Updated Successfully.");
 			}

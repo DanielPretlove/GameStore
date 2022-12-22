@@ -9,11 +9,11 @@ namespace GameStore.Shared.Models
 {
 	public class GameStoreRequestModel
 	{
-		public StoreSummaryModel Store { get; set; }
+		public GameStoreSummaryModel Store { get; set; }
 		public CustomerSummaryModel Customer { get; set; }
 		public GameSummaryModel Game { get; set; }
 
-		public GameStoreRequestModel(StoreSummaryModel store, CustomerSummaryModel customer, GameSummaryModel game)
+		public GameStoreRequestModel(GameStoreSummaryModel store, CustomerSummaryModel customer, GameSummaryModel game)
 		{
 			Store = store;
 			Customer = customer;

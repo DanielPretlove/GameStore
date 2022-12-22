@@ -40,7 +40,7 @@
 	public string DescriptionValue = string.Empty;
 	public string NameValue = string.Empty;
 	public string AddressValue = string.Empty;
-	public StoreSummaryModel storeSummary;
+	public GameStoreSummaryModel storeSummary;
 	private string? errorMessage;
 
 	public void ReturnToViewStoreDetails()
@@ -63,7 +63,7 @@
 			return;
 		}
 
-		storeSummary = await response.Content.ReadFromJsonAsync<StoreSummaryModel>();
+		storeSummary = await response.Content.ReadFromJsonAsync<GameStoreSummaryModel>();
 		createState = true;
 		await Task.Run(async () =>
 		{

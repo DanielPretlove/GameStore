@@ -28,15 +28,15 @@
 @code {
 	[Parameter]
 	public string? Id { get; set; }
-	public StoreSummaryModel storeSummary;
+	public GameStoreSummaryModel storeSummary;
 
 	protected override async Task OnInitializedAsync()
 	{
 		storeSummary = await GetCurrentStore();
 	}
 
-	public async Task<StoreSummaryModel> GetCurrentStore() => 
-		await http.GetFromJsonAsync<StoreSummaryModel>($"/api/GameStore/{Id}");
+	public async Task<GameStoreSummaryModel> GetCurrentStore() => 
+		await http.GetFromJsonAsync<GameStoreSummaryModel>($"/api/GameStore/{Id}");
 
 	public void ReturnToStoreMenu()
 	{
