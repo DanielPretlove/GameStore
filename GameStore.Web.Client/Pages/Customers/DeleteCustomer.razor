@@ -1,47 +1,5 @@
-﻿@inject IDialogService Dialog
-@inject HttpClient http
-@inject NavigationManager UriHelper
+﻿@using GameStore.Web.Client.Pages.Components
+@using GameStore.Web.Shared.Models.SummaryModels;
 
-<MudDialog>
-    <DialogContent>
-    </DialogContent>
-    <DialogActions>
-        <MudButton Disabled="@deleteState" Variant="Variant.Filled" StartIcon="@Icons.Filled.Delete" Color="Color.Error" OnClick="@(() => DeleteCustomerData())">
-            @if (deleteState)
-            {
-                <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true" />
-                <MudText Class="ms-2">Processing</MudText>
-            }
-            else
-            {
-                <MudText>Yes Delete</MudText>
-            }
-        </MudButton>
-        <MudButton Variant="Variant.Filled" StartIcon="@Icons.Filled.ArrowBack" OnClick="@(() => CloseDialog())">No</MudButton>
-    </DialogActions>
-</MudDialog>
 
-@code {
-    private bool deleteState = false;
-    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
-
-    public async Task DeleteCustomerData()
-    {
-        var dialogOptions = MudDialog.Options;
-        var deleteDialogOptions = dialogOptions as DeleteDialogOptions;
-        var id = deleteDialogOptions.Id;
-        deleteState = true;
-        await http.DeleteAsync($"/api/Customer/{id}");
-        await Task.Run(async () =>
-        {
-            await Task.Delay(3000);
-            UriHelper.NavigateTo("/customer");
-            CloseDialog();
-
-        });
-        deleteState = false;
-    }
-
-    public void CloseDialog() => MudDialog.Close(DialogResult.Ok(true));
-
-}
+<DeleteEntry T="CustomerSummaryModel" />

@@ -1,56 +1,13 @@
-﻿@page "/customer/{id}"
+﻿@page "/Customer/{id}"
+
+@using GameStore.Web.Client.Pages.Components
 @using GameStore.Web.Shared.Models.SummaryModels;
 
-@inject HttpClient http
-@inject NavigationManager UriHelper
-@inject IDialogService Dialog
 
-
-<MudPaper Class="pa-16 ma-2" Outlined="true">
-	@if (customerSummary != null)
-	{
-		<MudText Typo="Typo.h3">@customerSummary.Name Details</MudText>
-		<MudText Typo="Typo.subtitle1">@customerSummary.Id</MudText>
-		<MudText Typo="Typo.subtitle1">@customerSummary.Name</MudText>
-		<MudText Typo="Typo.subtitle1">@customerSummary.Address</MudText>
-		<MudText Typo="Typo.subtitle1">@customerSummary.DOB</MudText>
-	}
-
-	<br />
-	<MudButton Variant="Variant.Filled" StartIcon="@Icons.Filled.ArrowBack" OnClick="@(() => ReturnToCustomerMenu())">Go Back</MudButton>
-	<MudButton Variant="Variant.Filled" StartIcon="@Icons.Filled.Edit" Color="Color.Warning" OnClick="@(() => EditCustomer())">Edit</MudButton>
-	<MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Delete" Color="Color.Error" OnClick="@(() => DeleteCurrentCustomer())">Delete</MudButton>
-</MudPaper>
-
+<EntryDetails T="CustomerSummaryModel" Id="@Id" />
 
 
 @code {
 	[Parameter]
 	public string? Id { get; set; }
-	public CustomerSummaryModel customerSummary;
-
-	protected override async Task OnInitializedAsync()
-	{
-		customerSummary = await GetCurrentCustomer();
-	}
-
-	public async Task<CustomerSummaryModel> GetCurrentCustomer() =>
-		await http.GetFromJsonAsync<CustomerSummaryModel>($"/api/Customer/{Id}");
-
-	public void ReturnToCustomerMenu()
-	{
-		UriHelper.NavigateTo("/customer");
-	}
-
-	private void EditCustomer()
-	{
-		UriHelper.NavigateTo($"/customer/update/{Id}");
-	}
-
-	public void DeleteCurrentCustomer()
-	{
-		DeleteDialogOptions deleteDialog = new DeleteDialogOptions { Position = DialogPosition.Center, Id = Id };
-		Dialog.Show<DeleteCustomer>($"Are you sure you want to delete the {customerSummary.Name} From the database", deleteDialog);
-	}
-
 }

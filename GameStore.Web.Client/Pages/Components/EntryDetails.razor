@@ -1,0 +1,64 @@
+﻿
+@using GameStore.Web.Client.Pages.Customers;
+@using GameStore.Web.Shared.Models.SummaryModels;
+
+@inject HttpClient http
+@inject NavigationManager UriHelper
+@inject IDialogService Dialog
+
+@typeparam T where T : BaseEntitySummary
+
+
+<MudPaper Class="pa-16 ma-2" Outlined="true">
+	@if (summaryModels != null)
+	{
+		<MudText Typo="Typo.h3">@summaryModels.Name Details</MudText>
+
+		@foreach (var propertyInfo in typeof(T).GetProperties())
+		{
+			<MudText Typo="Typo.subtitle1">@propertyInfo.GetValue(summaryModels)</MudText>
+		}
+	}
+
+	<br />
+	<MudButton Variant="Variant.Filled" StartIcon="@Icons.Filled.ArrowBack" OnClick="@(() => ReturnToListMenu())">Go Back</MudButton>
+	<MudButton Variant="Variant.Filled" StartIcon="@Icons.Filled.Edit" Color="Color.Warning" OnClick="@(() => EditCurrentEntry())">Edit</MudButton>
+	<MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Delete" Color="Color.Error" OnClick="@(() => DeleteCurrentEntry())">Delete</MudButton>
+</MudPaper>
+
+
+
+@code {
+	[Parameter]
+	public string? Id { get; set; }
+
+	public T summaryModels;
+
+	protected override async Task OnInitializedAsync()
+	{
+		summaryModels = await GetCurrentEntry();
+	}
+
+	protected string ApiEntityName => typeof(T).Name.Replace("SummaryModel", "");
+
+
+	public async Task<T> GetCurrentEntry() =>
+		await http.GetFromJsonAsync<T>($"/api/{ApiEntityName}/{Id}");
+
+	public void ReturnToListMenu()
+	{
+		UriHelper.NavigateTo("/customer");
+	}
+
+	private void EditCurrentEntry()
+	{
+		UriHelper.NavigateTo($"/customer/update/{Id}");
+	}
+
+	public void DeleteCurrentEntry()
+	{
+		DeleteDialogOptions deleteDialog = new DeleteDialogOptions { Position = DialogPosition.Center, Id = Id };
+		Dialog.Show<DeleteEntry>($"Are you sure you want to delete the {summaryModels.Name} From the database", deleteDialog);
+	}
+
+}
