@@ -35,7 +35,6 @@ namespace GameStore.Web.API.Controllers
 			var result = await _service.GetDataById(id);
 			result = _mapper.Map<T>(result);
 			return result;
-
 		}
 
 		[HttpPost]

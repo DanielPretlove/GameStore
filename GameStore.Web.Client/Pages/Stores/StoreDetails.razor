@@ -1,59 +1,11 @@
-﻿@page "/store/{id}"
+﻿@page "/GameStore/{id}"
+
+@using GameStore.Web.Client.Pages.Components
 @using GameStore.Web.Shared.Models.SummaryModels;
 
-@inject HttpClient http
-@inject NavigationManager UriHelper
-@inject IDialogService Dialog
-
-
-<MudPaper Class="pa-16 ma-2" Outlined="true">
-	@if(storeSummary != null)
-	{	
-		<MudText Typo="Typo.h3">@storeSummary.Name Details</MudText>
-		<MudText Typo="Typo.subtitle1">@storeSummary.Id</MudText>
-		<MudText Typo="Typo.subtitle1">@storeSummary.Name</MudText>
-		<MudText Typo="Typo.subtitle1">@storeSummary.Description</MudText>
-		<MudText Typo="Typo.subtitle1">@storeSummary.Address</MudText>
-	}
-
-	<br />
-	<MudButton Variant="Variant.Filled" StartIcon="@Icons.Filled.ArrowBack" OnClick="@(() => ReturnToStoreMenu())">Go Back</MudButton>
-
-	<MudButton Variant="Variant.Filled" StartIcon="@Icons.Filled.Edit" Color="Color.Warning" OnClick="@(() => EditStore())">Edit</MudButton>
-	<MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Delete" Color="Color.Error" OnClick="@(() => DeleteCurrentStore())">Delete</MudButton>
-</MudPaper>
-
-
+<EntryDetails T="GameStoreSummaryModel" Id="@Id" />
 
 @code {
 	[Parameter]
 	public string? Id { get; set; }
-	public GameStoreSummaryModel storeSummary;
-
-	protected override async Task OnInitializedAsync()
-	{
-		storeSummary = await GetCurrentStore();
-	}
-
-	public async Task<GameStoreSummaryModel> GetCurrentStore() => 
-		await http.GetFromJsonAsync<GameStoreSummaryModel>($"/api/GameStore/{Id}");
-
-	public void ReturnToStoreMenu()
-	{
-		UriHelper.NavigateTo("/store");
-	}
-
-	private void EditStore()
-	{
-		UriHelper.NavigateTo($"/store/update/{Id}");
-	}
-
-
-	public void DeleteCurrentStore()
-	{
-		//DialogOptions dialogOptions = new DialogOptions() { Position = DialogPosition.Center };
-		DeleteDialogOptions deleteDialog = new DeleteDialogOptions { Position = DialogPosition.Center, Id = Id };
-		Dialog.Show<DeleteStore>($"Are you sure you want to delete the {storeSummary.Name} Store", deleteDialog);
-	}
-
 }

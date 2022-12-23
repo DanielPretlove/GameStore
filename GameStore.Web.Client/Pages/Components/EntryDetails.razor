@@ -47,12 +47,12 @@
 
 	public void ReturnToListMenu()
 	{
-		UriHelper.NavigateTo("/customer");
+		UriHelper.NavigateTo($"/{ApiEntityName}");
 	}
 
 	private void EditCurrentEntry()
 	{
-		UriHelper.NavigateTo($"/customer/update/{Id}");
+		UriHelper.NavigateTo($"/{ApiEntityName}/update/{Id}");
 	}
 
 	public void DeleteCurrentEntry()

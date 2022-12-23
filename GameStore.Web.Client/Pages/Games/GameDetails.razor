@@ -1,58 +1,11 @@
-﻿@page "/game/{id}"
+﻿@page "/Game/{id}"
+@using GameStore.Web.Client.Pages.Components
 @using GameStore.Web.Shared.Models.SummaryModels;
 
-@inject HttpClient http
-@inject NavigationManager UriHelper
-@inject IDialogService Dialog
 
-
-<MudPaper Class="pa-16 ma-2" Outlined="true">
-	@if (gameSummary != null)
-	{
-		<MudText Typo="Typo.h3">@gameSummary.Name Details</MudText>
-		<MudText Typo="Typo.subtitle1">@gameSummary.Id</MudText>
-		<MudText Typo="Typo.subtitle1">@gameSummary.Name</MudText>
-		<MudText Typo="Typo.subtitle1">@gameSummary.Description</MudText>
-		<MudText Typo="Typo.subtitle1">@gameSummary.ReleaseDate</MudText>
-	}
-
-	<br />
-	<MudButton Variant="Variant.Filled" StartIcon="@Icons.Filled.ArrowBack" OnClick="@(() => ReturnToGameMenu())">Go Back</MudButton>
-
-	<MudButton Variant="Variant.Filled" StartIcon="@Icons.Filled.Edit" Color="Color.Warning" OnClick="@(() => EditGame())">Edit</MudButton>
-	<MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Delete" Color="Color.Error" OnClick="@(() => DeleteCurrentGame())">Delete</MudButton>
-</MudPaper>
-
-
+<EntryDetails T="GameSummaryModel" Id="@Id" />
 
 @code {
 	[Parameter]
 	public string? Id { get; set; }
-	public GameSummaryModel gameSummary;
-
-	protected override async Task OnInitializedAsync()
-	{
-		gameSummary = await GetCurrentGame();
-	}
-
-	public async Task<GameSummaryModel> GetCurrentGame() =>
-		await http.GetFromJsonAsync<GameSummaryModel>($"/api/Game/{Id}");
-
-	public void ReturnToGameMenu()
-	{
-		UriHelper.NavigateTo("/game");
-	}
-
-	private void EditGame()
-	{
-		UriHelper.NavigateTo($"/game/update/{Id}");
-	}
-
-
-	public void DeleteCurrentGame()
-	{
-		DeleteDialogOptions deleteDialog = new DeleteDialogOptions { Position = DialogPosition.Center, Id = Id };
-		Dialog.Show<DeleteGame>($"Are you sure you want to delete the {gameSummary.Name} From the database", deleteDialog);
-	}
-
 }

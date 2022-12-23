@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,7 +9,8 @@ namespace GameStore.Web.Shared.Models.SummaryModels
 {
 	public class BaseEntitySummary
 	{
+		[Display(AutoGenerateField = false)]
 		public Guid Id { get; set; }
-		public string Name { get; set; } = string.Empty;
+		public virtual string Name { get; set; } = string.Empty;
 	}
 }

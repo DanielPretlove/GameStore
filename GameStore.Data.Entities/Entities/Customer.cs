@@ -11,6 +11,5 @@ namespace GameStore.Data.Entities.Entities
 		public virtual string Name { get; set; } = string.Empty;
 		public virtual string Address { get; set; } = string.Empty;
 		public virtual string DOB { get; set; } = string.Empty;
-
 	}
 }

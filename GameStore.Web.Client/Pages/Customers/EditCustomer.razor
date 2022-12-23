@@ -1,93 +1,10 @@
-﻿@page "/customer/update/{id}"
+﻿@page "/Customer/update/{id}"
+@using GameStore.Web.Client.Pages.Components
 @using GameStore.Web.Shared.Models.SummaryModels;
-@using System.Text.Json
-@using System.Text
 
-@inject NavigationManager UriHelper
-@inject HttpClient http
-
-@if (customerSummary != null)
-{
-	<MudCard>
-		<MudCardContent>
-			<MudForm @ref="form" @bind-IsValid="@success">
-				<MudText Typo="Typo.h3">Edit Customer Data</MudText>
-				<MudTextField @bind-Value="@customerSummary.Name" T="string" Label="Name" Required="true" RequiredError="Name is required!" />
-				<MudTextField @bind-Value="@customerSummary.Address" T="string" Label="Address" Required="true" RequiredError="Address is required!" />
-				<MudTextField @bind-Value="@customerSummary.DOB" T="string" Label="DOB" Required="true" RequiredError="DOB is required!" />
-			</MudForm>
-		</MudCardContent>
-		<MudCardActions>
-			<MudButton Variant="Variant.Filled" StartIcon="@Icons.Filled.ArrowBack" OnClick="@(() => ReturnToViewCustomerDetails())">Go Back</MudButton>
-			<MudButton Disabled="@updateState" Variant="Variant.Filled" StartIcon="@Icons.Filled.Save" Color="Color.Info" OnClick="@(() => UpdateCustomerData())">
-				@if (updateState)
-				{
-					<MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true" />
-					<MudText Class="ms-2">Processing</MudText>
-				}
-				else
-				{
-					<MudText>Save</MudText>
-				}
-
-			</MudButton>
-		</MudCardActions>
-	</MudCard>
-
-	<br />
-}
-
-@*
-	First display the data based on the id of the data
-	with all of the inputs showing
-	have a button of save and go back
-	and make sure they work
-	basically the gist of this
-*@
+<EditEntry T="CustomerSummaryModel" Id="@Id" />
 
 @code {
 	[Parameter]
-	public string? Id { get; set; }
-	public bool success;
-	public bool updateState = false;
-	public MudForm form;
-	public CustomerSummaryModel customerSummary;
-
-	protected override async Task OnInitializedAsync()
-	{
-		customerSummary = await GetCurrentCustomer();
-	}
-
-	public void ReturnToViewCustomerDetails()
-	{
-		UriHelper.NavigateTo("/customer/" + Id);
-	}
-
-	public async Task<CustomerSummaryModel> GetCurrentCustomer() =>
-		await http.GetFromJsonAsync<CustomerSummaryModel>($"/api/Customer/{Id}");
-
-	public async Task UpdateCustomerData()
-	{
-
-		HttpContent body = new StringContent(JsonSerializer.Serialize(customerSummary), Encoding.UTF8, "application/json");
-		var response = await http.PutAsync($"/api/Customer/{Id}", body);
-		if (response.IsSuccessStatusCode)
-		{
-			var content = await response.Content.ReadAsStringAsync();
-			if (!string.IsNullOrEmpty(content))
-			{
-				var objDeserializeObject = JsonSerializer.Deserialize<CustomerSummaryModel>(content);
-
-				Console.WriteLine("Data Updated Successfully.");
-			}
-
-			updateState = true;
-
-			await Task.Run(async () =>
-			{
-				await Task.Delay(3000);
-				ReturnToViewCustomerDetails();
-			});
-		}
-	}
+	public string Id { get; set; }
 }

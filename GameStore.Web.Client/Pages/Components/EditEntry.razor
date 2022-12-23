@@ -1,0 +1,134 @@
+﻿
+@using GameStore.Web.Shared.Models.SummaryModels;
+@using System.Text.Json
+@using System.Text
+
+@inject NavigationManager UriHelper
+@inject HttpClient http
+
+@typeparam T where T : BaseEntitySummary
+
+
+@if (summaryModel != null)
+{
+		<MudCard>
+			<MudCardContent>
+				<MudForm @ref="form" @bind-IsValid="@success">
+
+				<MudText Typo="Typo.h3">Edit @summaryModel.Name Data</MudText>
+
+				@foreach (var propertyInfo in typeof(T).GetProperties())
+				{
+					<MudTextField Value="propertyInfo.GetValue(summaryModel).ToString()" ValueChanged="(newValue) => HandleValueChanged(propertyInfo.Name, newValue)" T="string" Label="@propertyInfo.Name" Required="true" RequiredError="This is required" />
+
+				}
+
+				</MudForm>
+			</MudCardContent>
+			<MudCardActions>
+			<MudButton Variant="Variant.Filled" StartIcon="@Icons.Filled.ArrowBack" OnClick="@(() => ReturnToListMenu())">Go Back</MudButton>
+			<MudButton Disabled="@updateState" Variant="Variant.Filled" StartIcon="@Icons.Filled.Save" Color="Color.Info" OnClick="@(() => UpdateCurrentEntry())">
+				@if (updateState)
+				{
+					<MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true" />
+					<MudText Class="ms-2">Processing</MudText>
+				}
+				else
+				{
+					<MudText>Save</MudText>
+				}
+
+				</MudButton>
+			</MudCardActions>
+		</MudCard>
+
+		<br />
+}
+
+@code {
+	[Parameter]
+	public string? Id { get; set; }
+	public bool success;
+	public bool updateState = false;
+	public MudForm form;
+	public T summaryModel;
+	public Dictionary<string, string> PropertyValues { get; set; } = new Dictionary<string, string>();
+
+	public void HandleValueChanged(string propertyName, string newValueString)
+	{
+		var propertyInfo = typeof(T).GetProperty(propertyName);
+
+		object newValueTyped = newValueString;
+
+		//Convert the string to this type.
+		var propertyType = propertyInfo.PropertyType;
+		if (propertyType.Equals(typeof(DateTime)))
+		{
+			newValueTyped = DateTime.Parse(newValueString);
+		}
+
+		propertyInfo.SetValue(summaryModel, newValueTyped);
+
+		Console.WriteLine($"TODO: change propety {propertyName} to {newValueTyped}");
+		GetPropertyValues();
+	}
+
+	protected override async Task OnInitializedAsync()
+	{
+		summaryModel = await GetSummary();
+		GetPropertyValues();
+
+	}
+
+	protected string ApiEntityName => typeof(T).Name.Replace("SummaryModel", "");
+
+
+	public void GetPropertyValues()
+	{
+		foreach (var propertyInfo in typeof(T).GetProperties())
+		{
+			propertyInfo.GetValue(summaryModel).ToString();
+		}
+	}
+
+	public void ReturnToListMenu()
+	{
+		UriHelper.NavigateTo($"/{ApiEntityName}/" + Id);
+	}
+
+	public string[] FieldList
+	{
+		get
+		{
+			return typeof(T).GetProperties().Select(x => x.Name).ToArray();
+		}
+	}
+
+	public async Task<T> GetSummary() =>
+		await http.GetFromJsonAsync<T>($"/api/{ApiEntityName}/{Id}");
+
+
+	public async Task UpdateCurrentEntry()
+	{
+		HttpContent body = new StringContent(JsonSerializer.Serialize(summaryModel), Encoding.UTF8, "application/json");
+		var response = await http.PutAsync($"/api/{ApiEntityName}/{Id}", body);
+		if (response.IsSuccessStatusCode)
+		{
+			var content = await response.Content.ReadAsStringAsync();
+			if (!string.IsNullOrEmpty(content))
+			{
+				var objDeserializeObject = JsonSerializer.Deserialize<T>(content);
+
+				Console.WriteLine("Data Updated Successfully.");
+			}
+
+			updateState = true;
+
+			await Task.Run(async () =>
+			{
+				await Task.Delay(3000);
+				ReturnToListMenu();
+			});
+		}
+	}
+}

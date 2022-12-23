@@ -1,5 +1,126 @@
-﻿<h3>CreateEntry</h3>
+﻿@using GameStore.Web.Shared.Models.SummaryModels;
+@using System.Text.Json;
+@using System.Text;
+
+@inject NavigationManager UriHelper
+@inject HttpClient http
+
+@typeparam T where T : BaseEntitySummary, new()
+
+
+<MudCard>
+	<MudCardContent>
+		<MudForm @ref="form">
+			<MudText Typo="Typo.h3">Create New @ApiEntityName Entry</MudText>
+			@foreach (var propertyInfo in typeof(T).GetProperties())
+			{
+				if (propertyInfo.PropertyType == typeof(string))
+				{
+					<MudTextField T="string"
+								  Value="propertyInfo.GetValue(summaryModel).ToString()" 
+								  ValueChanged="(newValue) => propertyInfo.SetValue(summaryModel, newValue)" 
+								  Label="@propertyInfo.Name" 
+								  Required="true" 
+								  RequiredError="Name is required!" />
+
+				}
+				else if (propertyInfo.PropertyType == typeof(DateTime))
+				{
+					<MudDatePicker></MudDatePicker>
+				}
+
+
+			}
+		</MudForm>
+	</MudCardContent>
+	<MudCardActions>
+		<MudButton Variant="Variant.Filled" StartIcon="@Icons.Filled.ArrowBack" OnClick="@(() => ReturnToListMenu())">Go Back</MudButton>
+		<MudButton Disabled="@createState" Variant="Variant.Filled" StartIcon="@Icons.Filled.Save" Color="Color.Info" OnClick="@(() => CreateNewEntry())">
+			@if (createState == true)
+			{
+						<MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true" />
+						<MudText Class="ms-2">Processing</MudText>
+			}
+			else
+			{
+						<MudText>Save</MudText>
+			}
+		</MudButton>
+	</MudCardActions>
+</MudCard>
+<br />
 
 @code {
+	public bool createState = false;
+	public MudForm form;
+	public T? summaryModel;
+	private string? errorMessage;
 
+	protected override void OnInitialized()
+	{
+		summaryModel = new();
+	}
+
+	protected string ApiEntityName => typeof(T).Name.Replace("SummaryModel", "");
+
+	public async Task HandleValueChanged(string propertyName, string newValueString)
+	{
+		var propertyInfo = typeof(T).GetProperty(propertyName);
+
+		object newValueTyped = newValueString;
+
+		//Convert the string to this type.
+		var propertyType = propertyInfo.PropertyType;
+		if (propertyType.Equals(typeof(DateTime)))
+		{
+			newValueTyped = DateTime.Parse(newValueString);
+		}
+
+		propertyInfo.SetValue(summaryModel, newValueTyped);
+
+		Console.WriteLine($"TODO: change propety {propertyName} to {newValueTyped}");
+		await GetPropertyValues();
+	}
+
+	public void ReturnToListMenu()
+	{
+		UriHelper.NavigateTo($"/{ApiEntityName}");
+	}
+
+	public async Task GetPropertyValues()
+	{
+		foreach (var propertyInfo in typeof(T).GetProperties())
+		{
+			propertyInfo.GetValue(typeof(T)).ToString();
+		}
+	}
+
+
+	public async Task CreateNewEntry()
+	{
+		////var postBody = new { Name = NameValue, Address = AddressValue, DOB = DOBValue };
+		//var postBody;
+		//foreach (var propertyInfo in typeof(T).GetProperties())
+		//{
+		//	postBody = propertyInfo.SetValue(summaryModel, propertyInfo.GetValue(typeof(T).ToString()));
+		//}
+
+
+		using var response = await http.PostAsJsonAsync($"api/{ApiEntityName}", summaryModel);
+
+		if (!response.IsSuccessStatusCode)
+		{
+			errorMessage = response.ReasonPhrase;
+			Console.WriteLine($"There was an error! {errorMessage}");
+			return;
+		}
+
+		summaryModel = await response.Content.ReadFromJsonAsync<T>();
+		createState = true;
+		await Task.Run(async () =>
+		{
+			await Task.Delay(3000);
+			ReturnToListMenu();
+		});
+	}
 }
