@@ -30,4 +30,8 @@
 	  <ProjectReference Include="..\GameStore.Web.Shared\GameStore.Web.Shared.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Controllers\Helpers\" />
+  </ItemGroup>
+
 </Project>

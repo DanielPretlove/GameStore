@@ -7,7 +7,7 @@ using AutoMapper;
 using GameStore.Data.Entities.Entities;
 using GameStore.Web.Shared.Models.SummaryModels;
 
-namespace GameStore.Common.Helpers
+namespace GameStore.Web.API.Helpers
 {
 	public class AutoMapperProfiles : Profile
 	{

@@ -1,10 +1,8 @@
 ﻿using GameStore.Application.Services;
-using GameStore.Common.Helpers;
 using GameStore.Data.Access.Repositories;
 using GameStore.Data.Access.Repositories.Interfaces;
+using GameStore.Web.API.Helpers;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 
 
 namespace GameStore.Common.Extensions
@@ -20,7 +18,7 @@ namespace GameStore.Common.Extensions
 			services.AddScoped(typeof(AutoMapper.Mapper));
 			services.AddDbContext<GameStoreDataContext>(options => 
 			{
-				options.UseSqlServer(config.GetConnectionString("GameStoreDB"), b => b.MigrationsAssembly("GameStore.Web.API"));
+				options.UseSqlServer(config.GetConnectionString("GameStoreDB"), b => b.MigrationsAssembly("GameStore.Web.Server"));
 			});
 
 			return services;

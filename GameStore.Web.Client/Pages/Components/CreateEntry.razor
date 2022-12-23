@@ -26,7 +26,7 @@
 				}
 				else if (propertyInfo.PropertyType == typeof(DateTime))
 				{
-					<MudDatePicker></MudDatePicker>
+					<MudDatePicker Label="@propertyInfo.Name" Date="Convert.ToDateTime(propertyInfo.GetValue(summaryModel))" DateChanged="(newDate) => propertyInfo.SetValue(summaryModel, newDate)"></MudDatePicker>
 				}
 
 

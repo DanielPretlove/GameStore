@@ -9,10 +9,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace GameStore.Web.API.Migrations
+namespace GameStore.Web.Server.Migrations
 {
     [DbContext(typeof(GameStoreDataContext))]
-    [Migration("20221215231104_InitialMigration")]
+    [Migration("20221223053843_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
@@ -35,11 +35,14 @@ namespace GameStore.Web.API.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("DOB")
+                    b.Property<DateTime>("DateOfBirth")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("FirstName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("LastName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 

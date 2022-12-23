@@ -3,13 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using GameStore.Data.Entities.Entities;
 
 namespace GameStore.Web.Shared.Models.SummaryModels
 {
 	public partial class GameStoreSummaryModel : BaseEntitySummary
 	{
-        public required virtual string Description { get; set; }
-		public required virtual string Address { get; set; }
+        public virtual string Description { get; set; }
+		public virtual string Address { get; set; }
 	}
 }

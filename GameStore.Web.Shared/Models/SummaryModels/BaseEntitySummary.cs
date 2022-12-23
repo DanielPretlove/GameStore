@@ -9,7 +9,6 @@ namespace GameStore.Web.Shared.Models.SummaryModels
 {
 	public class BaseEntitySummary
 	{
-		[Display(AutoGenerateField = false)]
 		public Guid Id { get; set; }
 		public virtual string Name { get; set; } = string.Empty;
 	}
